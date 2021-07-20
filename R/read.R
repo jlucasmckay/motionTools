@@ -3,41 +3,6 @@
 # silence readr messages
 options(readr.num_columns = 0)
 
-# Be sure to add your own token
-
-#' Read data from a REDCap report. Default arguments depend on specific project.
-#' @importFrom magrittr %>%
-#' @export
-ReadRedcapReport = function(
-  token = GetRedcapToken(),
-  url = "https://redcap.emory.edu/api/",
-  report_id = '29228'
-){
-  form.data <- list("token"=token,
-                    content='report',
-                    format='csv',
-                    report_id=report_id,
-                    csvDelimiter='',
-                    rawOrLabel='raw',
-                    rawOrLabelHeaders='raw',
-                    exportCheckboxLabel='false',
-                    returnFormat='json'
-  )
-  response <- httr::POST(url, body = form.data, encode = "form")
-  httr::content(response)
-}
-
-#' Read data from REDCap and restructure
-#' @importFrom magrittr %>%
-#' @export
-ReadRedcap = function() ReadRedcapReport() %>%
-  dplyr::mutate(gender = if_else(sex==1,"Female","Male")) %>%
-  dplyr::select(-sex) %>%
-  rename(age = age_capture) %>%
-  dplyr::mutate(diagnosis = if_else(dw_primary_diagnosis %in% c("Paralysis agitans","Parkinson's disease"),"Parkinson's disease",
-                                    if_else(dw_primary_diagnosis %in% c("Essential tremor","Essential and other specified forms of tremor"),"Essential Tremor","Other"))) %>%
-  dplyr::mutate(diagnosis = factor(diagnosis,levels = c("Parkinson's disease","Essential Tremor","Other")))
-
 #' Return personal.dat file based on NRM file location
 #' @importFrom magrittr %>%
 #' @export
@@ -72,7 +37,7 @@ ReadTrbCoord = function(file.name){
 
 # Read the average data from the nrm file. note that in some cases a large number of empty columns are generated; only extract the first three.
 #' @export
-ReadNrmAverages = function(nrm_file) read_tsv(nrm_file,n_max=27,col_types = cols(Side = "c", Right = "d", Left = "d"))[,1:3] %>% 
+ReadNrmAverages = function(nrm_file) read_tsv(nrm_file,n_max=27,col_types = cols(Side = "c", Right = "d", Left = "d"))[,1:3] %>%
 rename(Variable = Side, lft = Left, rt = Right) %>%
   pivot_longer(-Variable, names_to = "Side", values_to = "Value") %>%
   left_join(
@@ -112,7 +77,7 @@ rename(Variable = Side, lft = Left, rt = Right) %>%
   summarize(Value = min(Value, na.rm=T)) %>%
   ungroup() %>%
   pivot_wider(names_from="Variable",values_from="Value") %>%
-  rename(step_width = step_width_rt) %>% select(-step_width_lft) %>% 
+  rename(step_width = step_width_rt) %>% select(-step_width_lft) %>%
   select(
     step_leng_ave_rt,
     step_leng_ave_lft,
@@ -143,10 +108,10 @@ rename(Variable = Side, lft = Left, rt = Right) %>%
 #' @importFrom magrittr %>%
 #' @export
 ReadNrmTimeseries = function(nrm_file){
-  raw = read_tsv(nrm_file,skip=28) %>% select(-starts_with("SD"))
+  raw = read_tsv(nrm_file,skip=28) %>% select(-dplyr::starts_with("SD"))
   raw[,1:46] %>%
     dplyr::mutate(percent_gait_cycle = row_number()) %>%
-    select(percent_gait_cycle, everything())
+    select(percent_gait_cycle, tidyselect::everything())
 }
 
 # read anthropemetric data from personal.dat.
@@ -155,9 +120,9 @@ ReadNrmTimeseries = function(nrm_file){
 ReadPersonalData = function(file.name) read_delim(file.name, delim = ":", col_names = F, n_max = 16) %>%
   pivot_wider(names_from="X1",values_from="X2") %>%
   select(-ends_with("Name")) %>%
-  select(-ends_with("Date")) %>% 
-  select(-ends_with("ID#")) %>% 
-  FixNames() %>% 
+  select(-ends_with("Date")) %>%
+  select(-ends_with("ID#")) %>%
+  FixNames() %>%
   mutate(across(-marker.set,as.numeric))
 
 # Read single row of a .trc file
@@ -204,6 +169,56 @@ ReadTrcData = function(file.name, n.markers = 60){
   names(numeric.data) = variable.names
   trc.data = tidyr::as_tibble(numeric.data)
 }
+
+# Read a PKMAS .csv file.
+#' @importFrom magrittr %>%
+#' @export
+ReadPkmasData = function(fileName){
+
+  # read the patient information
+  patient = readr::read_csv(fileName, col_names = F, n_max = 9) %>%
+    dplyr::rename(Var = X1, Val = X2) %>%
+    dplyr::select(dplyr::starts_with("V"))
+
+  datetimeStr = patient$Val[patient$Var == "Test Time"]
+  datetime = lubridate::mdy_hm(datetimeStr)
+
+  walkData = tibble::tibble(
+    tec_mrn = patient$Val[patient$Var == "Medical Record"],
+    pkmasDatetime = datetime,
+    Memo = patient$Val[patient$Var == "Memo"]
+  )
+
+  # read the walk information, omit the "# Samples" data
+  walk = readr::read_csv(fileName, col_names = T, skip = 11, n_max = 14) %>%
+    dplyr::rename(Meas = X1, Side = X2)
+  walk$Side[is.na(walk$Side)] = "Bilateral"
+  walk$Description = paste0(walk$Meas, ", ", walk$Side)
+  walk = walk %>%
+    dplyr::select(-Meas, -Side) %>%
+    dplyr::select(Description, tidyselect::everything())
+
+  walk = walk[!grepl("#Samples", walk$Description),]
+
+  # convert to long format
+  # add %>% drop_na(Measurement) to delete missing data
+  walkLong = walk %>%
+    tidyr::pivot_longer(-Description, names_to="Variable", values_to="Measurement") %>%
+    dplyr::select(Variable, tidyselect::everything()) %>%
+    tidyr::drop_na(Measurement)%>%
+    dplyr::mutate(Outcome = paste0(Variable, ", ", Description)) %>%
+    dplyr::select(Outcome, Measurement)
+
+  # convert to wide format
+  walkWide = walkLong %>%
+    tidyr::pivot_wider(names_from = Outcome, values_from = Measurement)
+
+  # convert to tall format
+  walkData = dplyr::bind_cols(walkData, walkWide)
+}
+
+
+
 
 
 

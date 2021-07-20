@@ -22,6 +22,17 @@ cd = function(d) setwd(d)
 #' @export
 pwd = function() getwd()
 
+#' Infix check for pattern at start of first argument
+#' @export
+#' @rdname startswith
+`%startswith%` = function(s, pattern) startsWith(s, pattern)
+
+#' Infix check for pattern at end of first argument
+#' @export
+#' @rdname endswith
+`%endswith%` = function(s, pattern) endsWith(s, pattern)
+
+
 #' Infix check for pattern present in first argument
 #' @export
 #' @rdname contains
@@ -99,7 +110,7 @@ ViewExcel = function(x){
   system2("open",fname)
 }
 
-# XY array to tibble for visualization
+#' XY array to tibble for visualization
 #' @export
 XyToTibble = function(xy){
   r = dim(xy)[1]
@@ -113,7 +124,7 @@ XyToTibble = function(xy){
     value = drop(pracma::Reshape(xy,r*c)))
 }
 
-# Tibble to XY array for visualization
+#' Tibble to XY array for visualization
 #' @export
 TibbleToXy = function(tib){
   out = matrix(nrow = nrow(tib), ncol = nrow(tib))
@@ -123,7 +134,7 @@ TibbleToXy = function(tib){
   out
 }
 
-# Add a singleton dimension
+#' Add a singleton dimension
 #' @export
 AddDim = function(im0){
   im1 = im0
@@ -131,13 +142,33 @@ AddDim = function(im0){
   im1
 }
 
-# Fix names in a pipe
+#' Fix names in a pipe
 #' @importFrom magrittr %>%
 #' @export
 FixNames = function(t){
   names(t) = names(t) %>% tolower() %>% str_replace_all(" ",".") %>% str_remove_all("[^a-zA-Z0-9\\.]")
   t
 }
+
+#' Add a date (time) stamp to a generic file.ext
+#' @export
+DateFile = function(f, addtime = F, sep = "_"){
+  n = tools::file_path_sans_ext(f)
+  e = tools::file_ext(f)
+  d = stringr::str_replace_all(Sys.Date(),"-",sep)
+  t = stringr::str_replace_all(format(Sys.time(), "%X"),":",sep)
+  fname = ifelse(addtime,paste0(n,sep,d,sep,t,".",e),paste0(n,sep,d,".",e))
+}
+
+#' Write a csv file somewhere within or at the end of a pipe.
+#' @export
+HardCopyRightThere = function(d,f = "hardcopy.csv",addtime = T){
+  readr::write_csv(d,DateFile(f,addtime),na="")
+  d
+}
+
+
+
 
 
 
