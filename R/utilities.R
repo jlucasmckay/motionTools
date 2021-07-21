@@ -72,10 +72,6 @@ nanvar = function(x) var(x, na.rm = T)
 #' @export
 NanVar = function(x) var(x, na.rm = T)
 
-#' Print a dataframe nicely
-#' @export
-PrintNicely = function(d) kableExtra::kable_styling(kableExtra::kable(d),full_width=F,position="left")
-
 #' @export
 MnSd = function(x,n.digits = 1)
   if (length(x)>1) {
@@ -83,24 +79,6 @@ MnSd = function(x,n.digits = 1)
   } else {
     paste(round(mean(x,na.rm=T),1))
   }
-
-#' Fix a column
-#' @export
-FixColumn = function(demo_tab){
-  names(demo_tab)[1] = "Variable"
-  # remove the nonbreaking space characters from the first columns
-  demo_tab$Variable = demo_tab$Variable %>% gsub("&nbsp;","",.)
-  demo_tab
-}
-
-#' Get rid of "N-Miss" rows in tableby output
-#' @export
-FilterNMiss = function(dframe) dframe[dframe$Variable %omits% "N-Miss",]
-
-#' Get rid of "Range" rows in tableby output
-#' @export
-FilterRange = function(dframe) dframe[dframe$Variable %omits% "Range",]
-
 
 #' Open in system viewer
 #' @export
@@ -150,22 +128,6 @@ FixNames = function(t){
   t
 }
 
-#' Add a date (time) stamp to a generic file.ext
-#' @export
-DateFile = function(f, addtime = F, sep = "_"){
-  n = tools::file_path_sans_ext(f)
-  e = tools::file_ext(f)
-  d = stringr::str_replace_all(Sys.Date(),"-",sep)
-  t = stringr::str_replace_all(format(Sys.time(), "%X"),":",sep)
-  fname = ifelse(addtime,paste0(n,sep,d,sep,t,".",e),paste0(n,sep,d,".",e))
-}
-
-#' Write a csv file somewhere within or at the end of a pipe.
-#' @export
-HardCopyRightThere = function(d,f = "hardcopy.csv",addtime = T){
-  readr::write_csv(d,DateFile(f,addtime),na="")
-  d
-}
 
 
 
