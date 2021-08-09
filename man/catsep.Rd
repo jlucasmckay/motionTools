@@ -2,10 +2,10 @@
 % Please edit documentation in R/utilities.R
 \name{catsep}
 \alias{catsep}
-\title{Alias for cat(x,sep="\n")}
+\title{Alias for cat(x,sep=newline)}
 \usage{
 catsep(x, sep = "\\n")
 }
 \description{
-Alias for cat(x,sep="\n")
+Alias for cat(x,sep=newline)
 }

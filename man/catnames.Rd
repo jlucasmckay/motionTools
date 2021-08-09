@@ -2,10 +2,10 @@
 % Please edit documentation in R/utilities.R
 \name{catnames}
 \alias{catnames}
-\title{Alias for cat(names(x),sep="\n")}
+\title{Alias for cat(names(x),sep=newline)}
 \usage{
 catnames(x, sep = "\\n")
 }
 \description{
-Alias for cat(names(x),sep="\n")
+Alias for cat(names(x),sep=newline)
 }

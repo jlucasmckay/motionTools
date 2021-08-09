@@ -6,11 +6,11 @@ usethis::use_pipe(export = TRUE)
 #' @export
 hrule = function() paste0(rep("-", getOption("width") - 2L), collapse = "")
 
-#' Alias for cat(x,sep="\n")
+#'Alias for cat(x,sep=newline)
 #' @export
 catsep = function(x,sep="\n") cat(x,sep=sep)
 
-#' Alias for cat(names(x),sep="\n")
+#' Alias for cat(names(x),sep=newline)
 #' @export
 catnames = function(x,sep="\n") cat(names(x),sep=sep)
 
