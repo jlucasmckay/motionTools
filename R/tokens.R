@@ -1,5 +1,3 @@
 # tokens.R
 
-#' Supply a user REDCap token. End users should edit this file.
-#' @export
-GetRedcapToken = function() "a"
+# tokens should be supplied in .REnviron as in https://cran.r-project.org/web/packages/httr/vignettes/secrets.html
