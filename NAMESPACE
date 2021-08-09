@@ -2,6 +2,7 @@
 
 export("%>%")
 export("%contains%")
+export("%dot%")
 export("%endswith%")
 export("%notin%")
 export("%omits%")
