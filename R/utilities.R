@@ -46,7 +46,12 @@ pwd = function() getwd()
 #' Opposite of "in"
 #' @export
 #' @rdname notin
-`%notin%` <- Negate(`%in%`)
+`%notin%` = Negate(`%in%`)
+
+#' infix dot product
+#' @export
+#' @rdname dot
+`%dot%` = function(x,y) sum(x*y)
 
 #' Mean, ignore NaN
 #' @export
