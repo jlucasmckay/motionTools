@@ -49,3 +49,6 @@ docs/
 
 # translation temp files
 po/*~
+
+# Desktop files
+*.DS_Store
