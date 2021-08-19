@@ -1,9 +1,6 @@
 # Any files with tokens
 *tokens*
 
-# Large files
-inst/*
-
 # History files
 .Rhistory
 .Rapp.history
