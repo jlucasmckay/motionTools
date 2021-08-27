@@ -3,12 +3,12 @@
 #' Read data from a REDCap report.
 #' Arguments are as supplied in API playground.
 #'
-#' The API token should be specified in the user's .Renviron file.
+#' The API token should be stored in the user's .Renviron file.
 #'
 #' @importFrom magrittr %>%
 #' @export
 ReadRedcapReport = function(
-  tokenEnvVarName = "api-token-pdfalls",
+  token,
   url = "https://redcap.emory.edu/api/",
   report_id = '29228',
   format='csv',
@@ -18,7 +18,6 @@ ReadRedcapReport = function(
   exportCheckboxLabel='false',
   returnFormat='json')
   {
-  token = Sys.getenv(tokenEnvVarName)
   form.data <- list(token=token,
                     content='report',
                     format=format,
