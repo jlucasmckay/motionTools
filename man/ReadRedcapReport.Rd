@@ -18,6 +18,5 @@ ReadRedcapReport(
 )
 }
 \description{
-Read data from a REDCap report.
-Arguments are as supplied in API playground.
+The API token should be stored in the user's .Renviron file.
 }

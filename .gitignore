@@ -1,6 +1,9 @@
 # Any files with tokens
 *tokens*
 
+# .Renviron files
+.Renviron
+
 # History files
 .Rhistory
 .Rapp.history
