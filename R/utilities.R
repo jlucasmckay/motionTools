@@ -1,7 +1,5 @@
 # utilities.R
 
-usethis::use_pipe(export = TRUE)
-
 #' horizontal rule for terminal output
 #' @export
 hrule = function() paste0(rep("-", getOption("width") - 2L), collapse = "")
@@ -31,7 +29,6 @@ pwd = function() getwd()
 #' @export
 #' @rdname endswith
 `%endswith%` = function(s, pattern) endsWith(s, pattern)
-
 
 #' Infix check for pattern present in first argument
 #' @export
@@ -126,10 +123,9 @@ AddDim = function(im0){
 }
 
 #' Fix names in a pipe
-#' @importFrom magrittr %>%
 #' @export
 FixNames = function(t){
-  names(t) = names(t) %>% tolower() %>% str_replace_all(" ",".") %>% str_remove_all("[^a-zA-Z0-9\\.]")
+  names(t) = names(t) |> tolower() |> str_replace_all(" ",".") |> str_remove_all("[^a-zA-Z0-9\\.]")
   t
 }
 

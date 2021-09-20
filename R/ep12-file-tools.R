@@ -1,4 +1,4 @@
-# ep12-file-tools.R
+#ep12-file-tools.R
 
 #' Replace common directory locations like Z:\ with the MotionAnalysis root directory
 #' @export
