@@ -62,8 +62,8 @@ rename(Variable = Side, lft = Left, rt = Right) |>
         "single_sup_time",
         "step_width"
       )
-    )
-  by="Variable") |>
+    ),
+    by = "Variable") |>
   na.exclude() |>
   mutate(Variable = paste(new.name,Side,sep="_")) |>
   select(-c(new.name,Side)) |>
