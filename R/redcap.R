@@ -5,6 +5,8 @@
 #'
 #' The API token should be stored in the user's .Renviron file.
 #'
+#' Additional arguments to read_csv() (e.g., guess_max = 2000) can be passed as inputs.
+#'
 #' @export
 ReadRedcapReport = function(
   token,
@@ -15,8 +17,10 @@ ReadRedcapReport = function(
   rawOrLabel='raw',
   rawOrLabelHeaders='raw',
   exportCheckboxLabel='false',
-  returnFormat='json')
-  {
+  returnFormat='json',
+  ...
+  )
+{
   form.data <- list(token=token,
                     content='report',
                     format=format,
@@ -28,5 +32,6 @@ ReadRedcapReport = function(
                     returnFormat=returnFormat
   )
   response <- httr::POST(url, body = form.data, encode = "form")
-  httr::content(response)
+  readr::read_csv(httr::content(response,as="text"),...)
 }
+
