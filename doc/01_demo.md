@@ -14,7 +14,9 @@ This tutorial describes how to access functionality in `motionTools`.
 	* `git clone https://github.com/jlucasmckay/motionTools`
 	* `cd motionTools`
 3. Edit
-4. Push up changes
+4. Update documentation
+	* `library(devtools)`
+5. Push up changes
 	* `git status` 
 	* `git add [changed file]` 
 	* Do not add files that you do not want to contribute, e.g., `random_scraps.R`
