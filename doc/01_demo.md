@@ -15,6 +15,7 @@ This tutorial describes how to access functionality in `motionTools`.
 	* `cd motionTools`
 3. Edit
 4. Update documentation
+	* run R, either from terminal or within RStudio
 	* `library(devtools)`
 	* `library(roxygen2)`
 	* `document()`
