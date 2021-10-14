@@ -14,9 +14,13 @@ ReadRedcapReport(
   rawOrLabel = "raw",
   rawOrLabelHeaders = "raw",
   exportCheckboxLabel = "false",
-  returnFormat = "json"
+  returnFormat = "json",
+  ...
 )
 }
 \description{
 The API token should be stored in the user's .Renviron file.
+}
+\details{
+Additional arguments to read_csv() (e.g., guess_max = 2000) can be passed as inputs.
 }
