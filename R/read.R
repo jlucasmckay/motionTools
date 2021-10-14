@@ -207,7 +207,28 @@ ReadPkmasData = function(fileName){
   walkData = dplyr::bind_cols(walkData, walkWide)
 }
 
-
+#' Read an APDM .csv file.
+#' @export
+ReadApdmGaitCycle = function(f){
+  # check for identified gait cycles
+  g = read_csv(f, skip = 9, n_max = 1, col_names = F)
+  
+  # if gait cycles were identified, load data, otherwise return null
+  if( grepl("Found \\d+ valid gait cycles",g[1,"X2"])==T ){
+  # read data
+  d = read_csv(f, skip=215, n_max = 2, col_names = F) %>%
+    select(-c(X2:X5)) %>%
+    pivot_longer(-X1, names_to = "n") %>% 
+    arrange(X1,n) %>% 
+    group_by(X1) %>% 
+    mutate(cycle = row_number()) %>% 
+    rename(outcome = X1) %>% 
+    select(outcome, cycle, value)
+  }else{
+    d = NA
+    }
+  return(d)
+}
 
 
 
