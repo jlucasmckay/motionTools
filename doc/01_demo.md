@@ -16,6 +16,9 @@ This tutorial describes how to access functionality in `motionTools`.
 3. Edit
 4. Update documentation
 	* `library(devtools)`
+	* `library(roxygen2)`
+	* `document()`
+	* `install()`
 5. Push up changes
 	* `git status` 
 	* `git add [changed file]` 
