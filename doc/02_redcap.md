@@ -10,6 +10,15 @@ This tutorial describes how to access Redcap datasets using functionality in `mo
     * ![screenshot](https://github.com/jlucasmckay/motionTools/blob/main/media/secrets.png)
 4. Supply your API token and this report ID to the ReadRedcapReport() function.
 
+## An example `.Renviron` file
+
+Store secrets in an `.Renviron` file in the project directory. Add this file to `.gitignore`. Here is a sample `.Renviron`:
+
+```
+fog_redcap_token=1XXXXDXXXX5XXXXGXXXXBXXXXCXXXX0C
+clinic_redcap_token=1XXXXCXXXX4XXXXFXXXXAXXXXCXXXX0D
+```
+
 ## Reading a report into R
 
 Again, your Redcap token should be stored in `.Renviron` within the project directory.
