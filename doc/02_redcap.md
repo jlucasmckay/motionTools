@@ -12,7 +12,7 @@ This tutorial describes how to access Redcap datasets using functionality in `mo
 
 ## An example `.Renviron` file
 
-Store secrets in an `.Renviron` file in the project directory. Add this file to `.gitignore`. Here is a sample `.Renviron`:
+Store secrets in an `.Renviron` file in the project directory. Add this plain text file to `.gitignore`. Here are the contents of a sample `.Renviron`:
 
 ```
 fog_redcap_token=1XXXXDXXXX5XXXXGXXXXBXXXXCXXXX0C
