@@ -180,8 +180,11 @@ ReadPkmasData = function(fileName){
   )
 
   # read the walk information, omit the "# Samples" data
-  walk = readr::read_csv(fileName, col_names = T, skip = 11, n_max = 14) |>
-    dplyr::rename(Meas = X1, Side = X2)
+  walk = readr::read_csv(fileName, col_names = T, skip = 11, n_max = 14)
+  
+ names(walk)[1] = "Meas"
+  names(walk)[2] = "Side"
+
   walk$Side[is.na(walk$Side)] = "Bilateral"
   walk$Description = paste0(walk$Meas, ", ", walk$Side)
   walk = walk |>
