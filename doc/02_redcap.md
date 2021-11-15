@@ -19,6 +19,8 @@ fog_redcap_token=1XXXXDXXXX5XXXXGXXXXBXXXXCXXXX0C
 clinic_redcap_token=1XXXXCXXXX4XXXXFXXXXAXXXXCXXXX0D
 ```
 
+Note that the `.Renviron` file is only read at RStudio launch; if you create this file while developing a project restart the program prior to using it. Make sure that `Sys.getenv("name_of_your_token")` returns your token properly if you run into problems.
+
 ## Reading a report into R
 
 Again, your Redcap token should be stored in `.Renviron` within the project directory.
