@@ -10,6 +10,7 @@
 #' @export
 ReadRedcapReport = function(
   token,
+  token_name = "redcap_token",
   url = "https://redcap.emory.edu/api/",
   report_id = '29228',
   format='csv',
@@ -21,6 +22,10 @@ ReadRedcapReport = function(
   ...
   )
 {
+  if(missing(token)){
+    token = Sys.getenv(token_name)
+  }
+
   form.data <- list(token=token,
                     content='report',
                     format=format,
