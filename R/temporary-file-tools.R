@@ -11,22 +11,30 @@ DateFile = function(f, addtime = F, sep = "_"){
 }
 
 #' Write a csv file somewhere within or at the end of a pipe.
+#' 
+#' @param f a string e.g. "file.csv"
+#' @param addtime a logical indicating whether to add a timestamp 
+#' 
 #' @export
 HardCopyRightThere = function(d,f = "hardcopy.csv",addtime = T){
   readr::write_csv(d,DateFile(f,addtime),na="")
   d
 }
 
-#' Read the most recent csv with a name spec from HardCopyRightThere
+
+
+#' Read a file from HardCopyRightThere
+#'
+#' The user supplies a candidate filename as a string, the function sorts all files in the directory matching that filename and loads the first in sorted order.
+#' Note that if HardCopyRightThere has supplied a timestamped file, this will read the first match without a timestamp, or, barring that, the most recent timestamp.
+#'
 #' @export
 ReadHardCopy = function(f = "hardcopy.csv"){
   d = dirname(f)
-  b = tools::file_path_sans_ext(f)
-  e = tools::file_ext(f)
-
-  files = tools::list_files_with_exts(dir = d, exts = e)
-  # note that this may fail if user supplies file names like mpg and mpg34; this behavior is not supported.
-  matchingFiles = files[startsWith(files,file.path(d,b))]
-  mostRecentFile = head(sort(matchingFiles,T),1)
-  readr::read_csv(mostRecentFile)
+  s = stem(f)
+  e = suffix(f)
+  
+  matching.files = sort(list.files(d,(paste0("^",s))),decreasing = TRUE)
+  readr::read_csv(matching.files[1])
 }
+
