@@ -8,7 +8,7 @@ Description: Miscellaneous tools for human movement data and statistics
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests:
     kableExtra
 Imports: 

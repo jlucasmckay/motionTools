@@ -6,6 +6,11 @@
 \usage{
 HardCopyRightThere(d, f = "hardcopy.csv", addtime = T)
 }
+\arguments{
+\item{f}{a string e.g. "file.csv"}
+
+\item{addtime}{a logical indicating whether to add a timestamp}
+}
 \description{
 Write a csv file somewhere within or at the end of a pipe.
 }

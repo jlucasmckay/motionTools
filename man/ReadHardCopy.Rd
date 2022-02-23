@@ -2,10 +2,11 @@
 % Please edit documentation in R/temporary-file-tools.R
 \name{ReadHardCopy}
 \alias{ReadHardCopy}
-\title{Read the most recent csv with a name spec from HardCopyRightThere}
+\title{Read a file from HardCopyRightThere}
 \usage{
 ReadHardCopy(f = "hardcopy.csv")
 }
 \description{
-Read the most recent csv with a name spec from HardCopyRightThere
+The user supplies a candidate filename as a string, the function sorts all files in the directory matching that filename and loads the first in sorted order.
+Note that if HardCopyRightThere has supplied a timestamped file, this will read the first match without a timestamp, or, barring that, the most recent timestamp.
 }

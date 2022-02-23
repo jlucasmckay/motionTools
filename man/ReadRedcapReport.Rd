@@ -7,6 +7,7 @@ Arguments are as supplied in API playground.}
 \usage{
 ReadRedcapReport(
   token,
+  token_name = "redcap_token",
   url = "https://redcap.emory.edu/api/",
   report_id = "29228",
   format = "csv",
